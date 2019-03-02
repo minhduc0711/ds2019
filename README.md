@@ -11,6 +11,8 @@ USTH ICT 2019 Distributed Systems
 Group Info
 =======================
 
-* Name 1 (ID1)
-* Name 2 (ID2)
-
+* Pham Minh Duc (USTHBI7-040)
+* Lai Khang Duy (USTHBI7-051)
+* Nguyen Duc Khai (USTHBI7-085)
+* Luu Gia An (USTHBI7-003)
+* Bui Quoc Trung (USTHBI7-153)
