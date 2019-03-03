@@ -35,23 +35,20 @@ int main(int argc, char* argv[]) {
     connect(serv, (struct sockaddr *)&ad, ad_length);
 
     char* file_name = argv[2];
-
     char buffer[BUF_SIZE];
-    int fd = open(file_name, O_RDONLY);
-    if (fd < 0) {
-        exit(1);
-    }
 
-    char *file_ext = get_filename_ext(argv[2]);
-
+    // Extract the file extension and send it to the server
+    char *file_ext = get_filename_ext(file_name);
     write(serv, file_ext, strlen(file_ext));
 
-    while (1)
-    {
+    // Open the file to read
+    int fd = open(file_name, O_RDONLY);
+    if (fd < 0) exit(1);
+
+    // Read and send file to server in minibatch of BUF_SIZE bytes
+    while (1) {
         int n = read(fd, buffer, BUF_SIZE);
-        printf("%s", buffer);
-        if (n == 0)
-            break;
+        if (n == 0) break;
         write(serv, buffer, n);
     }
     close(serv);

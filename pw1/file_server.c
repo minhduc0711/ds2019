@@ -38,20 +38,19 @@ int main() {
             // I'm the son, I'll serve this client
             printf("client connected\n");
 
+            char buffer[BUF_SIZE];
             char file_ext[10];
+
+            // Read the file extension
             read(cli, file_ext, 10);
 
-            char name[15];
-            strcpy(name, "received.");
-            char* file_name = strcat(name, file_ext);
-
+            // Create the target file
+            char* file_name = strcat("received.", file_ext);
             int fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY);
-
-            char buffer[BUF_SIZE];
-
             if (fd < 0) exit(1);
+
+            // Read and write mini-batch to the target file
             while (1) {
-                printf("%s", buffer);
                 int n = read(cli, buffer, BUF_SIZE);
                 if (n == 0) break;
                 write(fd, buffer, n);

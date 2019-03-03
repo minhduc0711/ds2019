@@ -1,0 +1,100 @@
+\documentclass{article}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{graphicx}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+	language=C,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=4
+}
+
+\title{Practical work 1 report}
+\author{Pham Minh Duc \and Nguyen Duc Khai \and Luu Gia An \and Lai Khang Duy \and Bui Quoc Trung}
+
+\begin{document}
+
+\maketitle
+
+\section{Protocol}
+We used TCP sockets to establish a connection between the server and the client program.
+
+\section{Process}
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\linewidth]{/home/minhduc0711/Downloads/tcp_file_transfer.png}
+	\caption{}
+	\label{TCP file transfer}
+\end{figure}
+
+
+\section{File transfer}
+
+\begin{enumerate}
+	\item Client
+	\begin{lstlisting}
+	char* file_name = argv[2];
+	char buffer[BUF_SIZE];
+	
+	// Extract the file extension and send it to the server
+	char *file_ext = get_filename_ext(file_name);
+	write(serv, file_ext, strlen(file_ext));
+	
+	// Open the file to read
+	int fd = open(file_name, O_RDONLY);
+	if (fd < 0) exit(1);
+	
+	// Read and send file to server in minibatch of BUF_SIZE bytes
+	while (1) {
+		int n = read(fd, buffer, BUF_SIZE);
+		if (n == 0) break;
+		write(serv, buffer, n);
+	}
+	close(serv);
+	close(fd);
+	\end{lstlisting}
+	
+	\item Server
+	\begin{lstlisting}
+	char buffer[BUF_SIZE];
+	char file_ext[10];
+	
+	// Read the file extension
+	read(cli, file_ext, 10);
+	
+	// Create the target file
+	char* file_name = strcat("received.", file_ext);
+	int fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY);
+	if (fd < 0) exit(1);
+	
+	// Read and write mini-batch to the target file
+	while (1) {
+		int n = read(cli, buffer, BUF_SIZE);
+		if (n == 0) break;
+		write(fd, buffer, n);
+	}
+	
+	close(cli);
+	close(fd);
+	\end{lstlisting}
+	
+\end{enumerate}
+
+\end{document}
