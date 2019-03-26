@@ -11,7 +11,8 @@ public class FileSenderImpl implements FileSender {
         try {
             receivedFile.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(receivedFile, true);
-            fileOutputStream.write(buffer);
+//            fileOutputStream.write(buffer);
+            fileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

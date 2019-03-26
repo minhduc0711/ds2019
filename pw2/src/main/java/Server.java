@@ -7,7 +7,7 @@ public class Server {
         FileSenderImpl fileSenderImpl = new FileSenderImpl();
 
         try {
-            FileSender skeleton = (FileSender) UnicastRemoteObject.exportObject(fileSenderImpl, 11111);
+            FileSender skeleton = (FileSender) UnicastRemoteObject.exportObject(fileSenderImpl, 2345);
 
             Registry registry = LocateRegistry.getRegistry();
             registry.rebind("FileSender", skeleton);
